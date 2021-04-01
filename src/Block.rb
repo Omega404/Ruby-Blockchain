@@ -7,4 +7,7 @@ class Block
     def hush
         @hush
     end
+    def email
+        @email
+    end
 end

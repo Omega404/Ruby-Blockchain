@@ -7,4 +7,8 @@ class Tester < Minitest::Test
     chainB = Block.new(123,456)
     assert_equal 0, chainB.hush
   end
+  def test_email
+    chainB = Block.new(123,456)
+    assert(chainB.email != nil)
+  end
 end
