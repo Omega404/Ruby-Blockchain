@@ -1,18 +1,27 @@
 require 'digest'
 
 class Block
-    def initialize(email,previousBlock)
+    def initialize(index,email,previousBlock,fecha,hash)
         @index = 0
         @email = email
         @pBlock = previousBlock
-        @time = Time.now
-        @hash = Digest::SHA256.hexdigest "holamundo"
+        @fecha = fecha
+        @hash = hash
+    end
+    def index
+        @index
+    end
+    def hashprevio
+        @pBlock
     end
     def hash
         @hash
     end
     def email
         @email
+    end
+    def fecha
+        @fecha
     end
 end
 
