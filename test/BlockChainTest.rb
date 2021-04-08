@@ -35,18 +35,32 @@ class Tester < Minitest::Test
     assert_equal "abc", resultado.hash
   end
 
-  #def test_bloque_genesis_ingual_bloque0
-  #  b = Blockchain.new()
-  #  resultado = b.getbloque(0)
-  #  resultadogenesis = b.genesis()
-  #  assert_equal resultado, resultadogenesis
-  #end
+  def test_bloque_genesis_ingual_bloque0
+    b = Blockchain.new()
+    resultado = b.getbloque(0)
+    resultadogenesis = b.getgenesis
+    assert_equal resultado, resultadogenesis
+    assert_equal 0,resultadogenesis.index
+  end
 
-  #def test_generar_bloque1
-  #  b = Blockchain.new()
-  #  bloque1 = b.generarbloque("emailinvetado@pagina.com","30/08/1998")
-  #  resultadogenesis = b.genesis()
-  #  assert_equal bloque1.hashprevio(), resultadogenesis.hash()
-  #  assert_equal 1, bloque1.index()
-  #end
+  def test_generar_bloque1
+    b = Blockchain.new()
+    b.generarbloque("emailinvetado@pagina.com","30/08/1998","hash")
+    bloque1 = b.getbloque(1)
+    resultadogenesis = b.getgenesis
+    assert_equal bloque1.hashprevio(), resultadogenesis.hash()
+    assert_equal "abc",bloque1.hashprevio()
+    assert_equal 1, bloque1.index()
+  end
+  
+  def test_generar_bloque2
+    b = Blockchain.new()
+    b.generarbloque("emailinvetado@pagina.com","30/08/1998","hash")
+    b.generarbloque("emailinvetado1@pagina.com","31/08/1998","hash1")
+    bloque1 = b.getbloque(1)
+    bloque2 = b.getbloque(2)
+    assert_equal bloque2.hashprevio(), bloque1.hash()
+    assert_equal "hash",bloque2.hashprevio()
+    assert_equal 2, bloque2.index()
+  end
 end
