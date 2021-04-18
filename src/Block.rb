@@ -1,26 +1,10 @@
-require 'digest'
-
 class Block
     def initialize(index,email,previousBlock,fecha,hash)
         @index = index
         @email = email
-        @pBlock = previousBlock
+        @hashprevio = previousBlock
         @fecha = fecha
         @hash = hash
     end
-    def index
-        @index
-    end
-    def hashprevio
-        @pBlock
-    end
-    def hash
-        @hash
-    end
-    def email
-        @email
-    end
-    def fecha
-        @fecha
-    end
+    attr_reader :index,:email,:hashprevio,:fecha,:hash
 end
