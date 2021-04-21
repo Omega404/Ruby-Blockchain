@@ -1,5 +1,4 @@
-require 'date'
-require 'minitest/autorun'
+require './test/test_helper'
 require './src/blockchain.rb'
 
 
@@ -122,7 +121,7 @@ class Tester < Minitest::Test
   def test_getlast
     b = Blockchain.instance
     refute_nil b.getlast
-    assert_equal b.getbloque(b.getlast.index + 1),nil
+    assert_nil b.getbloque(b.getlast.index + 1)
   end
 
   def test_limpiar
@@ -130,7 +129,23 @@ class Tester < Minitest::Test
     b.generarbloque("emailinvetado@pagina.com",Date.strptime('30-08-1998','%d-%m-%Y'))
     refute_nil b.getbloque(1)
     b.limpiar
-    assert_equal nil,b.getbloque(1)
+    assert_nil b.getbloque(1)
     assert_equal b.getgenesis, b.getlast
+  end
+
+  def test_100bloques
+    b = Blockchain.instance
+    b.limpiar
+    f = Date.strptime('01-01-2000','%d-%m-%Y')
+    f0 = f
+    for i in 1..100
+      f = f.next_day(1)
+      b.generarbloque("#{i}@pagina.com",f)
+    end
+    bloque = b.getbloque(50)
+    assert_equal bloque.fecha, Date.strptime('20-02-2000','%d-%m-%Y')
+    assert_equal true, b.verificacion
+    assert_equal bloque.email, "50@pagina.com"
+    assert_equal b.getbloque(1).email, "1@pagina.com"
   end
 end
