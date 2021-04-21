@@ -147,5 +147,6 @@ class Tester < Minitest::Test
     assert_equal true, b.verificacion
     assert_equal bloque.email, "50@pagina.com"
     assert_equal b.getbloque(1).email, "1@pagina.com"
+    assert_equal b.getlast.index, 100
   end
 end
