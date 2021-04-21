@@ -9,16 +9,12 @@ class Blockchain
     include Singleton
     def initialize()
         @array = [genesis()]
-        @fecha
-    end
-
-    def hashear(texto)
-        Hasheador.getstrategy(@fecha,texto)
     end
 
     def genesis
-        block = Block.new(0,"","","",Hash.new)
-        return block
+        block = Block.new(0,"","","")
+        block.hash = Hash.new
+        block
     end
 
     def getbloque(indice)
@@ -42,13 +38,19 @@ class Blockchain
     end
 
     def generarbloque(email,fecha)
-        @fecha = fecha.mday
-        hash = hashear(generarJson(@array.size,email,fecha,@array.last.hash))
-        @array.push(Block.new(@array.size,email,@array.last.hash,fecha,hash))
+        bloque = Block.new(@array.size,email,@array.last.hash,fecha)
+        bloque.hash = hashear(bloque)
+        @array.push(bloque)
+        bloque
+    end
+    
+    def hashear(bloque)
+        texto = generarJson(bloque)
+        Hasheador.getstrategy(bloque.fecha.mday,texto)
     end
 
-    def generarJson(index,email,fecha,hashprevio)
-        datos = [index,email,fecha,hashprevio]
+    def generarJson(bloque)
+        datos = [bloque.index,bloque.email,bloque.fecha,bloque.hashprevio]
         datos.to_json
     end
     
@@ -60,22 +62,13 @@ class Blockchain
         estado = true
         lista = []
         if @array[0].hash != Hash.new or @array[0].hashprevio != ""
-            puts 'se activo el hash 0'
             estado = false
         end
         for i in 1..@array.last.index
-            if i != 0
-                if @array[i].hashprevio != @array[i-1].hash or @array[i].hash != Hasheador.getstrategy(@array[i].fecha.mday,generarJson(@array[i].index,@array[i].email,@array[i].fecha,@array[i-1].hash))
-                    p @array[i]
-                    puts "hash:#{@array[i].hash} hash generado#{hashear(generarJson(@array[i].index,@array[i].email,@array[i].fecha,@array[i].hashprevio))}"
-                    p @array[i-1]
-                    estado = false
-                end
+            if @array[i].hashprevio != @array[i-1].hash or @array[i].hash != hashear(@array[i])
+                estado = false
             end
         end
         estado
     end
 end
-
-b = Blockchain.instance
-b.generarbloque("emailinvetado@pagina.com",Date.strptime('14-04-2021','%d-%m-%Y'))

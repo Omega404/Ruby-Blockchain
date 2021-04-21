@@ -1,10 +1,10 @@
 class Block
-    def initialize(index,email,previousBlock,fecha,hash)
+    def initialize(index,email,previousBlock,fecha)
         @index = index
         @email = email
         @hashprevio = previousBlock
         @fecha = fecha
-        @hash = hash
     end
     attr_reader :index,:email,:hashprevio,:fecha,:hash
+    attr_writer :hash
 end

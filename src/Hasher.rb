@@ -1,7 +1,5 @@
 require 'digest'
 require 'minitest/autorun'
-require 'singleton'
-require 'date'
 
 module Hasheador
     def self.getstrategy(fecha,texto)

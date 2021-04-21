@@ -62,23 +62,25 @@ class Tester < Minitest::Test
     assert_equal 2, bloque2.index
   end
 
-  #def test_generar_JSON
-  #  b = Blockchain.instance
-  #  assert_equal "[\"emailinvetado@pagina.com\",\"30/08/1998\"]", b.generarJson("emailinvetado@pagina.com","30/08/1998")
-  #end
+  def test_generar_JSON
+    b = Blockchain.instance
+    b.limpiar
+    bloque1 = b.generarbloque("emailinvetado@pagina.com",Date.strptime('30-08-1998','%d-%m-%Y'))
+    assert_equal "[1,\"emailinvetado@pagina.com\",\"1998-08-30\",{}]", b.generarJson(bloque1)
+  end
 
   def test_mismo_hash
     b = Blockchain.instance
-    bloque1 = Block.new(1,"emailinvetado@pagina.com","0","30/08/1998",b.hashear(b.generarJson(1,"emailinvetado@pagina.com","30/08/1998","0")))
-    bloque2 = Block.new(1,"emailinvetado@pagina.com","0","30/08/1998",b.hashear(b.generarJson(1,"emailinvetado@pagina.com","30/08/1998","0")))
-    assert_equal bloque1.hash, bloque2.hash
+    bloque1 = Block.new(1,"emailinvetado@pagina.com","0",Date.strptime('30-08-1998','%d-%m-%Y'))
+    bloque2 = Block.new(1,"emailinvetado@pagina.com","0",Date.strptime('30-08-1998','%d-%m-%Y'))
+    assert_equal b.hashear(bloque1), b.hashear(bloque2)
   end
 
   def test_mismo_hash2
     b = Blockchain.instance
-    bloque1 = Block.new(1,"emailinvetado@pagina.com","0","30/08/1998",b.hashear(b.generarJson(1,".com","30/08/1998","0")))
-    bloque2 = Block.new(1,"emailinvetado@pagina.com","0","30/08/1998",b.hashear(b.generarJson(1,".com","30/08/1998","0")))
-    assert_equal bloque1.hash, bloque2.hash
+    bloque1 = Block.new(1,".com","0",Date.strptime('30-08-1998','%d-%m-%Y'))
+    bloque2 = Block.new(1,".com","0",Date.strptime('30-08-1998','%d-%m-%Y'))
+    assert_equal b.hashear(bloque1), b.hashear(bloque2)
   end
 
   def test_singleton
@@ -100,6 +102,7 @@ class Tester < Minitest::Test
 
   def test_Hash_respecto_fecha
     b = Blockchain.instance
+    b.limpiar
     b.generarbloque("emailinvetado@pagina.com",Date.strptime('14-04-2021','%d-%m-%Y'))
     b.generarbloque("emailinvetado@pagina.com",Date.strptime('15-04-2021','%d-%m-%Y'))
     bloque1 = b.getbloque(1)
@@ -110,9 +113,9 @@ class Tester < Minitest::Test
 
   def test_verificar_cadena
     b = Blockchain.instance
-    b.generarbloque("emailinvetado@pagina.com",Date.strptime('30-08-1998','%d-%m-%Y'))
-    b.generarbloque("emailinvetado@pagina.com",Date.strptime('30-08-1998','%d-%m-%Y'))
-    b.generarbloque("emailinvetado@pagina.com",Date.strptime('30-08-1998','%d-%m-%Y'))
+    b.generarbloque("emailinvetado1@pagina.com",Date.strptime('27-08-1998','%d-%m-%Y'))
+    b.generarbloque("emailinvetado2@pagina.com",Date.strptime('28-08-1998','%d-%m-%Y'))
+    b.generarbloque("emailinvetado3@pagina.com",Date.strptime('29-08-1998','%d-%m-%Y'))
     assert_equal true,b.verificacion
   end
 
