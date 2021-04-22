@@ -58,6 +58,7 @@ class Tester < Minitest::Test
     bloque1 = b.getbloque(1)
     bloque2 = b.getbloque(2)
     assert_equal bloque2.hashprevio(), bloque1.hash()
+    assert_equal 1, bloque1.index
     assert_equal 2, bloque2.index
   end
 
@@ -73,6 +74,13 @@ class Tester < Minitest::Test
     bloque1 = Block.new(1,"emailinvetado@pagina.com","0",Date.strptime('30-08-1998','%d-%m-%Y'))
     bloque2 = Block.new(1,"emailinvetado@pagina.com","0",Date.strptime('30-08-1998','%d-%m-%Y'))
     assert_equal b.hashear(bloque1), b.hashear(bloque2)
+  end
+
+  def test_hash_bloque
+    b = Blockchain.instance
+    b.limpiar
+    bloque1 = b.generarbloque("emailinvetado@pagina.com",Date.strptime('30-09-1998','%d-%m-%Y'))
+    assert_equal b.getlast.hash, "0052dcd85d9e856591b5438a7564693b16159c4be1b163997aa077032a333036"
   end
 
   def test_mismo_hash2
@@ -96,7 +104,8 @@ class Tester < Minitest::Test
     b.generarbloque("emailinvetado@pagina.com",Date.strptime('30-08-1998','%d-%m-%Y'))
     b.generarbloque("emailinvetado@pagina.com",Date.strptime('30-08-1998','%d-%m-%Y'))
     hash = b.getbloque(2).hash
-    assert_equal b.getbloque(2).hash, b.getbloquehash(hash)
+    bloque = b.getbloquehash(hash)
+    assert_equal bloque.index, 2
   end
 
   def test_Hash_respecto_fecha
@@ -107,7 +116,9 @@ class Tester < Minitest::Test
     bloque1 = b.getbloque(1)
     bloque2 = b.getbloque(2)
     assert bloque1.hash.start_with?('00')
+    assert bloque1.hash, ""
     assert bloque2.hash.start_with?('0')
+    assert bloque2.hash, ""
   end
 
   def test_verificar_cadena
