@@ -26,7 +26,7 @@ class Blockchain
         while hash_de_bloque != @array[i].hash
             i+=1
         end
-        @array[i].hash
+        @array[i]
     end
 
     def getgenesis
