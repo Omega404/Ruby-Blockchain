@@ -1,4 +1,5 @@
 require 'digest'
+require 'json'
 require 'minitest/autorun'
 
 module Hasheador
